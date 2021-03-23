@@ -132,6 +132,7 @@ public class SheetViewController: UIViewController {
     public var shouldDismiss: ((SheetViewController) -> Bool)?
     public var didDismiss: ((SheetViewController) -> Void)?
     public var sizeChanged: ((SheetViewController, SheetSize, CGFloat) -> Void)?
+    public var panGestureDidChange: (() -> Void)?
     
     public private(set) var contentViewController: SheetContentViewController
     var overlayView = UIView()
@@ -386,7 +387,7 @@ public class SheetViewController: UIViewController {
             
             case .began, .changed:
                 self.contentViewHeightConstraint.constant = newHeight
-                
+                self.panGestureDidChange?()
                 if offset > 0 {
                     let percent = max(0, min(1, offset / max(1, newHeight)))
                     self.transition.setPresentor(percentComplete: percent)
